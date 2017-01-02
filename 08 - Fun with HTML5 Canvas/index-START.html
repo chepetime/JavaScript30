@@ -6,7 +6,59 @@
 </head>
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
+
 <script>
+  const canvas    = document.querySelector('#draw');
+  const ctx       = canvas.getContext('2d');
+  canvas.width    = window.innerWidth;
+  canvas.height   = window.innerHeight;
+  ctx.strokeStyle = '#BADA55';
+  ctx.lineJoin    = 'round';
+  ctx.lineCap     = 'round';
+  ctx.lineWidth   = 100;
+  // ctx.globalCompositeOperation = 'multiply';
+  let isDrawing = false;
+  let lastX     = 0;
+  let lastY     = 0;
+  let hue       = 0;
+  let direction = true;
+
+  function draw(e) {
+    if (!isDrawing) return;
+    // Set color
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;;
+    // Begin parth
+    ctx.beginPath();
+    // Move to the start point
+    ctx.moveTo(lastX, lastY);
+    // Make a new line to the newest cursor point
+    ctx.lineTo(e.offsetX, e.offsetY);
+    // Paint the line
+    ctx.stroke();
+    // Set the new start point
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+    // Add up color hue
+    hue = (hue >= 360) ? 0 : hue+1;
+    // Set direction
+    direction = (ctx.lineWidth >= 100 || ctx.lineWidth <= 1 ) ? !direction : direction;
+    // Build up stroke size
+    ctx.lineWidth = (direction) ? ctx.lineWidth + 1 : ctx.lineWidth - 1;
+  }
+
+  /**
+   * Events
+   */
+
+  canvas.addEventListener('mousedown', (e) => {
+    // Set drawing state
+    isDrawing = true;
+    // Set new starting point
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseout', () => isDrawing = false);
+
 </script>
 
 <style>
