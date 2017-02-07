@@ -177,7 +177,7 @@
     <li data-time="1:56">
       Video 57
     </li>
-    <li data-time="4:04">
+    <li data-time="4:06">
       Video 58
     </li>
   </ul>
@@ -194,11 +194,15 @@ const seconds = timeNodes
 
 console.log({seconds});
 
-const hours = Math.floor(seconds / 3600);
-const secondsLeft = seconds % 3600;
+let secondsLeft = seconds;
 
-console.log({hours})
-console.log({secondsLeft});
+const hours = Math.floor(secondsLeft / 3600);
+secondsLeft = secondsLeft % 3600;
+
+const mins = Math.floor(secondsLeft / 60);
+secondsLeft = secondsLeft % 60;
+
+console.log(hours, mins, secondsLeft);
 
 </script>
 </body>
